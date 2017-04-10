@@ -11,6 +11,8 @@ import tkFileDialog
 import tkFont
 import sys
 import operator, itertools
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
 class PaintApp(Frame):
     def __init__(self,parent,posx,posy,*kwargs):
@@ -134,6 +136,11 @@ class PaintApp(Frame):
 
            self.image.save(filename)
            self.save = True
+           file = open(filename,encoding = "ISO-8859-1")
+           file1 = drive.CreateFile({'title':'Hello.txt'})
+           for line in file:
+               file1.SetContentString(line)
+            file1.Upload()
 
     def use_pen(self):
         self.eraserMode = False
@@ -225,6 +232,8 @@ class PaintApp(Frame):
         self.color = askcolor(color=self.color)[1]
 
 if __name__ == "__main__":
+    gauth = GoogleAuth()
+    drive = GoogleDrive(gauth)
     root=tk.Tk()
     root.wm_geometry("%dx%d+%d+%d" % (300, 300, 10, 10))
     root.config(bg='white')
